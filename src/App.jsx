@@ -1,11 +1,16 @@
 import React from "react";
 import Cards from "./components/Cards";
+import Home from "./components/Home";
+import UserList from "./components/UserList";
+import TodoList from "./components/TodoList";
 
 const App = () => {
   return (
     <>
-      {false && <Home />}
-      <Cards />
+      {/* <Home /> */}
+      {/* <Cards /> */}
+      {/* <UserList /> */}
+      <TodoList />
     </>
   );
 };
