@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../assets/Counter.css";
 
 const Counter = (props) => {
@@ -13,6 +13,16 @@ const Counter = (props) => {
   const decrement = () => {
     setCount(count - (changeValue || 1));
   };
+
+  useEffect(() => {
+    console.log("In UseEffect");
+
+    return () => {
+      console.log("Component Unmounted!");
+    };
+  }, [count]);
+
+  console.log("Outside useEffect");
 
   return (
     <div style={{ display: "flex", gap: "5px" }}>
