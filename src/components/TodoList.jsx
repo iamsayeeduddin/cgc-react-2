@@ -37,6 +37,20 @@ const TodoList = () => {
     setTasks(arr);
   };
 
+  const editTask = (e, id, task) => {
+    e.stopPropagation();
+    let arr = [...tasks];
+    let idx = arr.findIndex((ele) => ele.id === id);
+    if (idx > -1) {
+      let updatedTask = prompt("Update Task:", task);
+      arr[idx] = {
+        ...arr[idx],
+        task: updatedTask,
+      };
+      setTasks(arr);
+    }
+  };
+
   return (
     <div class="container-task">
       <h1>ToDo List</h1>
@@ -48,15 +62,25 @@ const TodoList = () => {
       </div>
       <ul id="taskList">
         {tasks.map((tsk) => (
-          <li className={tsk.isCompleted ? "completed" : ""} key={tsk.id} onClick={() => completeTask(tsk.id)}>
-            {tsk.task}
-            <button className="delete-btn" onClick={(e) => deleteTask(e, tsk.id)}>
-              Delete
-            </button>
-          </li>
+          <Task data={tsk} key={tsk.id} editTask={editTask} deleteTask={deleteTask} completeTask={completeTask} />
         ))}
       </ul>
     </div>
+  );
+};
+
+const Task = (props) => {
+  const { data, completeTask, deleteTask, editTask } = props;
+  return (
+    <li className={data.isCompleted ? "completed" : ""} onClick={() => completeTask(data.id)}>
+      {data.task}
+      <button className="delete-btn" onClick={(e) => editTask(e, data.id, data.task)}>
+        Edit
+      </button>
+      <button className="delete-btn" onClick={(e) => deleteTask(e, data.id)}>
+        Delete
+      </button>
+    </li>
   );
 };
 
