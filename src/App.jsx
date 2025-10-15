@@ -6,6 +6,8 @@ import TodoList from "./components/TodoList";
 import Counter from "./components/Counter";
 import ConditionalRender from "./utils/ConditionalRender";
 import { Route, Routes, Link } from "react-router-dom";
+import Products from "./components/Products";
+import ProductOverview from "./components/ProductOverview";
 
 const App = () => {
   const [show, setShow] = useState(true);
@@ -34,12 +36,19 @@ const App = () => {
         <li>
           <Link to="/todo">Todo List</Link>
         </li>
+        <li>
+          <Link to="/products">Products</Link>
+        </li>{" "}
       </ul>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cards" element={<Cards />} />
         <Route path="users" element={<UserList />} />
         <Route path="todo" element={<TodoList />} />
+        <Route path="/products">
+          <Route index element={<Products />} />
+          <Route path="/products/:productId" element={<ProductOverview />} />
+        </Route>
         <Route path="*" element={<h2>Not Found!</h2>} />
       </Routes>
     </>
