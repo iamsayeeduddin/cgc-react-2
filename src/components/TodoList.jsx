@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import "../assets/todoList.css";
+import { DataContext } from "./DataContext.js";
+import { useNavigate } from "react-router-dom";
 
 const TodoList = () => {
+  const navigate = useNavigate();
   const [inputText, setInputText] = useState("");
   const [tasks, setTasks] = useState([]);
+  const val = useContext(DataContext);
   //   const [tasks, setTasks] = useState([{ id: 2, task: "Check", isCompleted: false }]);
 
   const addTask = () => {
@@ -18,6 +22,8 @@ const TodoList = () => {
     setTasks(arr);
     setInputText("");
   };
+
+  console.log(val);
 
   const completeTask = (id) => {
     let arr = [...tasks];
@@ -51,12 +57,20 @@ const TodoList = () => {
     }
   };
 
+  // useEffect(() => {
+  //   const userData = JSON.parse(localStorage.getItem("user"));
+  //   if (!userData?.token) {
+  //     navigate("/login");
+  //   }
+  // }, []);
+
   return (
     <div class="container-task">
-      <h1>ToDo List</h1>
+      <h1>ToDo List {val.value}</h1>
       <div class="input-box">
         <input value={inputText} onChange={(evt) => setInputText(evt.target.value)} type="text" id="taskInput" placeholder="Enter a Task" />
         <button id="addBtn" onClick={addTask}>
+          {/* <button id="addBtn" onClick={() => val.setValue(inputText)}> */}
           Add
         </button>
       </div>

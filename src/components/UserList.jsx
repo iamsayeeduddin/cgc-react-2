@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { DataContext } from "./DataContext";
 
 const UserList = () => {
   // const users = [
@@ -7,6 +8,7 @@ const UserList = () => {
   //   { id: 3, name: "Mike Johnson", email: "mike@example.com" },
   //   { id: 4, name: "Emily Davis", email: "emily@example.com" },
   // ];
+  const val = useContext(DataContext);
   const [users, setUsers] = useState([]);
   const [user, setUser] = useState({});
   const [username, setUserName] = useState("");
@@ -41,7 +43,7 @@ const UserList = () => {
 
   return (
     <div className="p-4 max-w-xl mx-auto">
-      <h2 className="text-2xl font-bold mb-4 text-center">User List</h2>
+      <h2 className="text-2xl font-bold mb-4 text-center">User List {val.value}</h2>
       <ul className="space-y-3 flex gap-4 flex-wrap">
         {users.map((user) => (
           <li key={user.id} className="p-3 border rounded-lg shadow-sm hover:bg-gray-100 transition">
