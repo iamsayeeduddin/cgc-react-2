@@ -7,7 +7,11 @@ const Products = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/products/allProducts")
+      .get("http://localhost:5000/products/allProducts", {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(localStorage.getItem("user"))?.token}`,
+        },
+      })
       .then((res) => {
         setData(res.data);
       })

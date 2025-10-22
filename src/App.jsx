@@ -1,16 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Cards from "./components/Cards";
 import Home from "./components/Home";
 import UserList from "./components/UserList";
 import TodoList from "./components/TodoList";
 import Counter from "./components/Counter";
 import ConditionalRender from "./utils/ConditionalRender";
-import { Route, Routes, Link } from "react-router-dom";
+import { Route, Routes, Link, Navigate } from "react-router-dom";
 import Products from "./components/Products";
 import ProductOverview from "./components/ProductOverview";
+import Login from "./components/Login";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 const App = () => {
   const [show, setShow] = useState(true);
+  const [userData, setUserData] = useState({});
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    if (user?._id) {
+      setUserData(user);
+    }
+  }, []);
+
   return (
     <>
       {/* <button onClick={() => setShow(!show)}>{show ? "Hide" : "Show"} Users</button> */}
@@ -39,6 +50,11 @@ const App = () => {
         <li>
           <Link to="/products">Products</Link>
         </li>{" "}
+        {userData?.token ? null : (
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        )}
       </ul>
       <Routes>
         <Route path="/" element={<Home />} />
@@ -46,9 +62,24 @@ const App = () => {
         <Route path="users" element={<UserList />} />
         <Route path="todo" element={<TodoList />} />
         <Route path="/products">
-          <Route index element={<Products />} />
-          <Route path="/products/:productId" element={<ProductOverview />} />
+          <Route
+            index
+            element={
+              <ProtectedRoute userData={userData}>
+                <Products />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products/:productId"
+            element={
+              <ProtectedRoute userData={userData}>
+                <ProductOverview />
+              </ProtectedRoute>
+            }
+          />
         </Route>
+        <Route path="/login" element={userData?.token ? <Navigate to="/" /> : <Login setUserData={setUserData} />} />
         <Route path="*" element={<h2>Not Found!</h2>} />
       </Routes>
     </>
