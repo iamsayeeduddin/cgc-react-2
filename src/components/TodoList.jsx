@@ -1,29 +1,57 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useReducer } from "react";
 import "../assets/todoList.css";
 import { DataContext } from "./DataContext.js";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 
 const TodoList = () => {
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
   const [inputText, setInputText] = useState("");
-  const [tasks, setTasks] = useState([]);
+  // const [tasks, setTasks] = useState([]);
   const val = useContext(DataContext);
   //   const [tasks, setTasks] = useState([{ id: 2, task: "Check", isCompleted: false }]);
 
-  const addTask = () => {
-    if (!inputText.trim()) return;
-    let taskObj = {
-      id: Date.now(),
-      task: inputText.trim(),
-      isCompleted: false,
-    };
-    let arr = [...tasks];
-    arr.push(taskObj);
-    setTasks(arr);
-    setInputText("");
+  const reducerFn = (state, action) => {
+    let arr = [...state];
+    switch (action.type) {
+      case "ADD_TASK": {
+        if (!inputText.trim()) return;
+        let taskObj = {
+          id: Date.now(),
+          task: inputText.trim(),
+          isCompleted: false,
+        };
+        arr.push(taskObj);
+        return arr;
+      }
+      case "COMPLETE_TASK": {
+        let arr = [...state];
+        arr = arr.map((tsk) => {
+          if (tsk.id === action.id) {
+            tsk.isCompleted = !tsk.isCompleted;
+          }
+          return tsk;
+        });
+        return arr;
+      }
+    }
   };
 
-  console.log(val);
+  const [tasks, dispatchTasks] = useReducer(reducerFn, []);
+
+  // const addTask = () => {
+  //   if (!inputText.trim()) return;
+  //   let taskObj = {
+  //     id: Date.now(),
+  //     task: inputText.trim(),
+  //     isCompleted: false,
+  //   };
+  //   let arr = [...tasks];
+  //   arr.push(taskObj);
+  //   dispatchTasks({ type: "ADD_TASK", tasks: arr });
+  //   setInputText("");
+  // };
+
+  // console.log(val);
 
   const completeTask = (id) => {
     let arr = [...tasks];
@@ -33,14 +61,14 @@ const TodoList = () => {
       }
       return tsk;
     });
-    setTasks(arr);
+    dispatchTasks({ type: "COMPLETE_TASK", tasks: arr });
   };
 
   const deleteTask = (e, id) => {
     e.stopPropagation();
     let arr = [...tasks];
     arr = arr.filter((tsk) => tsk.id !== id);
-    setTasks(arr);
+    dispatchTasks({ type: "DELETE_TASK", tasks: arr });
   };
 
   const editTask = (e, id, task) => {
@@ -53,7 +81,7 @@ const TodoList = () => {
         ...arr[idx],
         task: updatedTask,
       };
-      setTasks(arr);
+      dispatchTasks({ type: "EDIT_TASK", tasks: arr });
     }
   };
 
@@ -69,7 +97,7 @@ const TodoList = () => {
       <h1>ToDo List {val.value}</h1>
       <div class="input-box">
         <input value={inputText} onChange={(evt) => setInputText(evt.target.value)} type="text" id="taskInput" placeholder="Enter a Task" />
-        <button id="addBtn" onClick={addTask}>
+        <button id="addBtn" onClick={() => dispatchTasks({ type: "ADD_TASK" })}>
           {/* <button id="addBtn" onClick={() => val.setValue(inputText)}> */}
           Add
         </button>

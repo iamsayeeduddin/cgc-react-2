@@ -11,6 +11,7 @@ import ProductOverview from "./components/ProductOverview";
 import Login from "./components/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { DataContext } from "./components/DataContext.js";
+import Calculator from "./components/Calculator.jsx";
 
 const App = () => {
   const [show, setShow] = useState(true);
@@ -64,6 +65,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/cards" element={<Cards />} />
+          <Route path="/calc" element={<Calculator />} />
           <Route path="users" element={<UserList />} />
           <Route path="todo" element={<TodoList />} />
           <Route path="/products">
