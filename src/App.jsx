@@ -12,6 +12,7 @@ import Login from "./components/Login";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import { DataContext } from "./components/DataContext.js";
 import Calculator from "./components/Calculator.jsx";
+import Hooks from "./components/Hooks.jsx";
 
 const App = () => {
   const [show, setShow] = useState(true);
@@ -39,6 +40,7 @@ const App = () => {
         <p>Testing HOC</p>
       </ConditionalRender> */}
       <A />
+      <Hooks />
       <DataContext.Provider value={{ value, setValue }}>
         <ul className="flex gap-5">
           <li>
